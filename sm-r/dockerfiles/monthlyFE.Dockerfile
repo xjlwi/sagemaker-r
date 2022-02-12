@@ -13,7 +13,7 @@ COPY ./docker_config/requirement.txt /requirement.txt
 RUN pip install -r requirement.txt
 
 ## Copy your working files over
-COPY ./raphael /raphael
+COPY ./src /src
 COPY ./docker_config /docker_config
 
 ## Define environment variables
@@ -24,7 +24,7 @@ ENV AWS_SECRETS_ARN=$AWS_SECRETS_ARN
 ENV ENVIRONMENT_FLAG=$ENVIRONMENT_FLAG
 
 #set python path
-ENV PYTHONPATH /raphael
+ENV PYTHONPATH /src
 
 # Run this script
-CMD ["python", "raphael/feature_engineering/partial_fe/main_monthly_data_loading.py"]
+CMD ["python", "/sm/samples/main_monthly_data_loading.py"]

@@ -13,13 +13,11 @@ COPY .requirements.R /tmp/requirements.R
 RUN Rscript /tmp/requirements.R
 
 ## Copy your working files over
-COPY ./raphael /raphael
-COPY ./docker_config /docker_config
+COPY ./src /src
 COPY ./dockerfiles /dockerfiles
 
 ## Define environment variables
 ENV ENVIRONMENT_FLAG=$ENVIRONMENT_FLAG
 
 # Run this script
-ENTRYPOINT ["Rscript", "/raphael/modelling/main_monthly_crude_jetkero_gasoline95merged_prod.R"]
-#CMD ["/raphael/modelling/main_monthly_crude_jetkero_gasoline95merged_prod.R"]
+ENTRYPOINT ["Rscript", "/sm/samples/main_monthly_crude_jetkero_gasoline95merged_prod.R"]
