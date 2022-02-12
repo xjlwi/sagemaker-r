@@ -1,0 +1,97 @@
+# Pipeline for Model Scoring
+
+pool: 
+   vmImage: ubuntu-latest
+stages:
+  - stage: ContinuousIntegration
+    jobs:
+    - job: ImageBuild
+      steps:
+        - task: DockerInstaller@0
+          displayName: Step 0b - Installing the Docker (Pre-requisite)
+          inputs:
+            dockerVersion: '17.09.0-ce'
+        - task: ECRPullImage@1
+          displayName: Step 0c - Pulling the base image from ECR
+          inputs:
+            awsCredentials: 'aws-raphael-dev'
+            regionName: 'ap-southeast-1'
+            repository: 'ptawsg-ecr-rph-ds-models'
+            imageSource: 'imagetag'
+            imageTag: 'rph-base-rdocker'
+            logResponse: true
+        - task: CmdLine@2
+          displayName: Step 1a - Re-tagging the base image container
+          inputs:
+            script: |
+              docker tag 900051432098.dkr.ecr.ap-southeast-1.amazonaws.com/ptawsg-ecr-rph-ds-models:rph-base-rdocker rph-base-rdocker:dev
+        - task: DownloadSecureFile@1
+          name: caCertificate
+          displayName: Step 1b - Download config_FE.yml from Secrets
+          inputs:
+            secureFile: 'config_FE.yml'
+        - task: CmdLine@2
+          displayName: Step 1c - Moving config_FE.yml to folder
+          inputs:
+            script: |
+              echo Downloading the config yml...
+              cwd=$(pwd)"/docker_config"
+              echo $cwd
+              mkdir $cwd
+              cp $(caCertificate.secureFilePath) $cwd/config.yml
+        - task: CmdLine@2
+          displayName: Step 2 - Building Docker image (development environment) - Monthly Training for Crude, Jetkero, Gasoline95
+          inputs:
+            script: docker build --force-rm -t rph-training-crude-jetkero-gasoline95-monthly-sm:sm -f dockerfiles/monthlyTraining.Dockerfile .
+        - task: CmdLine@2
+          displayName: Step 3 - Building Docker image (development environment) - Daily Model for Crude, Jetkero, Gasoline95
+          inputs:
+            script: docker build --force-rm -t rph-processing-crude-jetkero-gasoline95-daily-sm:sm -f dockerfiles/dailyProcessing.Dockerfile .
+        - task: CmdLine@2
+          displayName: Step 4 - Building Docker image (production environment) - Monthly Training for Crude, Jetkero, Gasoline95
+          inputs:
+            script: docker build --force-rm -t rph-training-crude-jetkero-gasoline95-monthly-sm-prod:sm -f dockerfiles/monthlyTraining_prod.Dockerfile .
+        - task: CmdLine@2
+          displayName: Step 5 - Building Docker image (production environment) - Daily Model for Crude, Jetkero, Gasoline95
+          inputs:
+            script: docker build --force-rm -t rph-processing-crude-jetkero-gasoline95-daily-sm-prod:sm -f dockerfiles/dailyProcessing_prod.Dockerfile .
+        - task: ECRPushImage@1
+          displayName: Step 6 - Pushing the sagemaker Monthly Training (with forecast) for Crude, Jetkero, Gasoline95 to development ECR 
+          inputs:
+            awsCredentials: 'aws-raphael-dev'
+            regionName: 'ap-southeast-1'
+            imageSource: 'imagename'
+            sourceImageName: 'rph-training-crude-jetkero-gasoline95-monthly-sm'
+            sourceImageTag: 'sm'
+            repositoryName: 'ptawsg-ecr-rph-ds-models'
+            pushTag: 'rph-training-crude-jetkero-gasoline95-monthly-sm'
+        - task: ECRPushImage@1
+          displayName: Step 7 - Pushing the sagemaker Daily Processing for Crude, Jetkero, Gasoline95 to development ECR
+          inputs:
+            awsCredentials: 'aws-raphael-dev'
+            regionName: 'ap-southeast-1'
+            imageSource: 'imagename'
+            sourceImageName: 'rph-processing-crude-jetkero-gasoline95-daily-sm'
+            sourceImageTag: 'sm'
+            repositoryName: 'ptawsg-ecr-rph-ds-models'
+            pushTag: 'rph-processing-crude-jetkero-gasoline95-daily-sm'
+        - task: ECRPushImage@1
+          displayName: Step 8 - Pushing the sagemaker Monthly Training (with forecast) for Crude, Jetkero, Gasoline95 to production ECR 
+          inputs:
+            awsCredentials: 'aws-raphael-prod'
+            regionName: 'ap-southeast-1'
+            imageSource: 'imagename'
+            sourceImageName: 'rph-training-crude-jetkero-gasoline95-monthly-sm-prod'
+            sourceImageTag: 'sm'
+            repositoryName: 'ptawsg-ecr-rph-ds-models'
+            pushTag: 'rph-training-crude-jetkero-gasoline95-monthly-sm'
+        - task: ECRPushImage@1
+          displayName: Step 9 - Pushing the sagemaker Daily Processing for Crude, Jetkero, Gasoline95 to production ECR
+          inputs:
+            awsCredentials: 'aws-raphael-prod'
+            regionName: 'ap-southeast-1'
+            imageSource: 'imagename'
+            sourceImageName: 'rph-processing-crude-jetkero-gasoline95-daily-sm-prod'
+            sourceImageTag: 'sm'
+            repositoryName: 'ptawsg-ecr-rph-ds-models'
+            pushTag: 'rph-processing-crude-jetkero-gasoline95-daily-sm'
