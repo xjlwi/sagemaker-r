@@ -39,7 +39,7 @@ vignettes/*.pdf
 .Renviron
 
 # Excel files
-.xls
+*.xls
 
 # Screen-to-gif
-.stg
+*.stg
