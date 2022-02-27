@@ -1,5 +1,5 @@
 # Pipeline for Model Scoring
-## TODO: update this
+
 pool: 
    vmImage: ubuntu-latest
 stages:
