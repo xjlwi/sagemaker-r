@@ -66,6 +66,22 @@ uploadObjS3 <- function (obj, s3folder_path, s3file_name){
   cat (glue::glue("Uploaded {object_name} into {s3folder_path}"))
 }
 
+## Save Model to Sagemaker model path
+uploadModelSM <- function(model, model_dir,
+                          model_version){
+  #'@param  model_version [str] e.g. m0_m5_v5s1a_rf
+  #'@param  CRUDE [str] "brent" or "dubai"
+  #'@param  model [obj] Model fitted to be uploaded to S3.
+  #'@param  forecastMonth [str] M0 Month-Year of model trained. 
+  #'@details  Saved Trained Monthly Model into S3 Bucket inside sagemaker.
+  
+  ## Set saved filename and path
+  # opt/ml/model/Model1_SM_v1.RDS
+  model_name <- paste0(model_dir, "Model1_SM_v",
+                       model_version, ".RDS")
+  base::saveRDS(model, model_name)
+  print (glue::glue("Uploaded Training Model into {model_dir} for {CRUDE}"))
+}
 
 # Returns PostgresDB Password.
 DB_PASSWORD = get_aws_secret(secret_key = "DB_PASSWORD", SecretID = config$AWS_SECRETS_ARN) %>% 
