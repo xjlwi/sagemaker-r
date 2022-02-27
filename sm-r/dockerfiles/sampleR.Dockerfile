@@ -12,12 +12,12 @@ COPY .requirements.R /tmp/requirements.R
 ## install required libs on container
 RUN Rscript /tmp/requirements.R
 
-## Copy your working files over
+## Copy your working files over into docker image
 COPY ./src /src
 COPY ./dockerfiles /dockerfiles
 
 ## Define environment variables
 ENV ENVIRONMENT_FLAG=$ENVIRONMENT_FLAG
 
-# Run this script
-ENTRYPOINT ["Rscript", "/sm/samples/main_monthly_crude_jetkero_gasoline95merged_prod.R"]
+## Run this script
+ENTRYPOINT ["Rscript", "/src/sm/samples/main_monthly_model.R"]
