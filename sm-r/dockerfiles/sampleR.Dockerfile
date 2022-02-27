@@ -14,7 +14,6 @@ RUN Rscript /tmp/requirements.R
 
 ## Copy your working files over into docker image
 COPY ./sm-r/src /src
-COPY ./sm-r/docker_config /docker_config
 COPY ./sm-r/dockerfiles /dockerfiles
 
 ## Define environment variables
