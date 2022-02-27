@@ -43,7 +43,7 @@ stages:
         - task: CmdLine@2
           displayName: Step 2 - Building Docker image (development environment) - Monthly Model training (Sagemaker sample)
           inputs:
-            script: docker build --force-rm -t rph-demo-sm:sm -f dockerfiles/sampleR.Dockerfile .
+            script: docker build --force-rm -t rph-demo-sm:sm -f sm-r/dockerfiles/sampleR.Dockerfile .
         - task: ECRPushImage@1
           displayName: Step 3 - Pushing the sagemaker Monthly Model training (Sagemaker sample) to development ECR 
           inputs:
