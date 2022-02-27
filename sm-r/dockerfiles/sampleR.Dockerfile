@@ -7,15 +7,15 @@ RUN apt-get install -y\
     libxml2
 
 ## Copy requirements.R to container directory /tmp
-COPY .requirements.R /tmp/requirements.R
+COPY .sm-r/requirements.R /tmp/requirements.R
 
 ## install required libs on container
 RUN Rscript /tmp/requirements.R
 
 ## Copy your working files over into docker image
-COPY ./src /src
-COPY ./docker_config /docker_config
-COPY ./dockerfiles /dockerfiles
+COPY ./sm-r/src /src
+COPY ./sm-r/docker_config /docker_config
+COPY ./sm-r/dockerfiles /dockerfiles
 
 ## Define environment variables
 ENV ENVIRONMENT_FLAG=$ENVIRONMENT_FLAG
