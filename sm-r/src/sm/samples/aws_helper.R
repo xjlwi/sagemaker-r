@@ -65,6 +65,8 @@ uploadObjS3 <- function (obj, s3folder_path, s3file_name){
   
   cat (glue::glue("Uploaded {object_name} into {s3folder_path}"))
 }
+
+
 # Returns PostgresDB Password.
 DB_PASSWORD = get_aws_secret(secret_key = "DB_PASSWORD", SecretID = config$AWS_SECRETS_ARN) %>% 
   as.character()
