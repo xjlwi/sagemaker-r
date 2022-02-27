@@ -1,5 +1,5 @@
 # Pipeline for Model Scoring
-
+## TODO: update this
 pool: 
    vmImage: ubuntu-latest
 stages:
@@ -40,58 +40,17 @@ stages:
               mkdir $cwd
               cp $(caCertificate.secureFilePath) $cwd/config.yml
         - task: CmdLine@2
-          displayName: Step 2 - Building Docker image (development environment) - Monthly Training for Crude, Jetkero, Gasoline95
+          displayName: Step 2 - Building Docker image (development environment) - Monthly Model training (Sagemaker sample)
           inputs:
-            script: docker build --force-rm -t rph-training-crude-jetkero-gasoline95-monthly-sm:sm -f dockerfiles/monthlyTraining.Dockerfile .
-        - task: CmdLine@2
-          displayName: Step 3 - Building Docker image (development environment) - Daily Model for Crude, Jetkero, Gasoline95
-          inputs:
-            script: docker build --force-rm -t rph-processing-crude-jetkero-gasoline95-daily-sm:sm -f dockerfiles/dailyProcessing.Dockerfile .
-        - task: CmdLine@2
-          displayName: Step 4 - Building Docker image (production environment) - Monthly Training for Crude, Jetkero, Gasoline95
-          inputs:
-            script: docker build --force-rm -t rph-training-crude-jetkero-gasoline95-monthly-sm-prod:sm -f dockerfiles/monthlyTraining_prod.Dockerfile .
-        - task: CmdLine@2
-          displayName: Step 5 - Building Docker image (production environment) - Daily Model for Crude, Jetkero, Gasoline95
-          inputs:
-            script: docker build --force-rm -t rph-processing-crude-jetkero-gasoline95-daily-sm-prod:sm -f dockerfiles/dailyProcessing_prod.Dockerfile .
+            script: docker build --force-rm -t rph-demo-sm:sm -f dockerfiles/sampleR.Dockerfile .
         - task: ECRPushImage@1
-          displayName: Step 6 - Pushing the sagemaker Monthly Training (with forecast) for Crude, Jetkero, Gasoline95 to development ECR 
+          displayName: Step 3 - Pushing the sagemaker Monthly Model training (Sagemaker sample) to development ECR 
           inputs:
             awsCredentials: 'aws-raphael-dev'
             regionName: 'ap-southeast-1'
             imageSource: 'imagename'
-            sourceImageName: 'rph-training-crude-jetkero-gasoline95-monthly-sm'
+            sourceImageName: 'rph-demo-sm'
             sourceImageTag: 'sm'
             repositoryName: 'ptawsg-ecr-rph-ds-models'
-            pushTag: 'rph-training-crude-jetkero-gasoline95-monthly-sm'
-        - task: ECRPushImage@1
-          displayName: Step 7 - Pushing the sagemaker Daily Processing for Crude, Jetkero, Gasoline95 to development ECR
-          inputs:
-            awsCredentials: 'aws-raphael-dev'
-            regionName: 'ap-southeast-1'
-            imageSource: 'imagename'
-            sourceImageName: 'rph-processing-crude-jetkero-gasoline95-daily-sm'
-            sourceImageTag: 'sm'
-            repositoryName: 'ptawsg-ecr-rph-ds-models'
-            pushTag: 'rph-processing-crude-jetkero-gasoline95-daily-sm'
-        - task: ECRPushImage@1
-          displayName: Step 8 - Pushing the sagemaker Monthly Training (with forecast) for Crude, Jetkero, Gasoline95 to production ECR 
-          inputs:
-            awsCredentials: 'aws-raphael-prod'
-            regionName: 'ap-southeast-1'
-            imageSource: 'imagename'
-            sourceImageName: 'rph-training-crude-jetkero-gasoline95-monthly-sm-prod'
-            sourceImageTag: 'sm'
-            repositoryName: 'ptawsg-ecr-rph-ds-models'
-            pushTag: 'rph-training-crude-jetkero-gasoline95-monthly-sm'
-        - task: ECRPushImage@1
-          displayName: Step 9 - Pushing the sagemaker Daily Processing for Crude, Jetkero, Gasoline95 to production ECR
-          inputs:
-            awsCredentials: 'aws-raphael-prod'
-            regionName: 'ap-southeast-1'
-            imageSource: 'imagename'
-            sourceImageName: 'rph-processing-crude-jetkero-gasoline95-daily-sm-prod'
-            sourceImageTag: 'sm'
-            repositoryName: 'ptawsg-ecr-rph-ds-models'
-            pushTag: 'rph-processing-crude-jetkero-gasoline95-daily-sm'
+            pushTag: 'rph-demo-sm'
+        
