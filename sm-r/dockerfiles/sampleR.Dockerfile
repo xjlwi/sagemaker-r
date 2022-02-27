@@ -7,7 +7,7 @@ RUN apt-get install -y\
     libxml2
 
 ## Copy requirements.R to container directory /tmp
-COPY .sm-r/requirements.R /tmp/requirements.R
+COPY ./sm-r/requirements.R /tmp/requirements.R
 
 ## install required libs on container
 RUN Rscript /tmp/requirements.R
