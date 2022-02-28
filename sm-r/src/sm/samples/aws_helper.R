@@ -80,7 +80,7 @@ uploadModelSM <- function(model, model_dir,
   model_name <- paste0(model_dir, "Model1_SM_v",
                        model_version, ".RDS")
   base::saveRDS(model, model_name)
-  print (glue::glue("Uploaded Training Model into {model_dir} for {CRUDE}"))
+  print (glue::glue("Uploaded Training Model into {model_dir} "))
 }
 
 # Returns PostgresDB Password.
