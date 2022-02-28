@@ -28,9 +28,9 @@ source(paste0(here::here(), "/src/sm/samples/aws_helper.R")) # Returns DB Passwo
 
 # Run Postgres DB Functions 
 if (ENV_FLAG == "production"){
-  source(paste0(here::here(), "/sm-r/src/samples/Petco_PostgreSQL_ConnectionServer.R"))
+  source(paste0(here::here(), "/src/sm/samples/Petco_PostgreSQL_ConnectionServer.R"))
   print ("Connected to Production RDS.")
 }else if (ENV_FLAG == "development"){
-  source(paste0(here::here(), "/sm-r/src/samples/Petco_PostgreSQL_ConnectionServerDevelopment.R"))
+  source(paste0(here::here(), "/src/sm/samples/Petco_PostgreSQL_ConnectionServerDevelopment.R"))
   print ("Connected to Development RDS.")
 }
