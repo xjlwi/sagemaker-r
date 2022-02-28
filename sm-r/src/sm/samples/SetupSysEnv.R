@@ -20,15 +20,16 @@ if (ENV_FLAG == "production"){
   Sys.setenv("R_CONFIG_ACTIVE" = "default") # default is Development.
 }
 # Get Config based on Environment
+print(paste0(here::here()))
 config <<- config::get(file = paste0(here::here(), "/docker_config/config.yml"), use_parent = FALSE)
 # Set DB Password, AWS S3 Enviroment
-source(paste0(here::here(), "/raphael/utils/aws_helper.R")) # Returns DB Password, AWS S3 bucket env
+source(paste0(here::here(), "/src/sm/samples/aws_helper.R")) # Returns DB Password, AWS S3 bucket env
 
 # Run Postgres DB Functions 
 if (ENV_FLAG == "production"){
-  source(paste0(here::here(), "/raphael/sql/R/Petco_PostgreSQL_ConnectionServer.R"))
+  source(paste0(here::here(), "/sm-r/src/samples/Petco_PostgreSQL_ConnectionServer.R"))
   print ("Connected to Production RDS.")
 }else if (ENV_FLAG == "development"){
-  source(paste0(here::here(), "/raphael/sql/R/Petco_PostgreSQL_ConnectionServerDevelopment.R"))
+  source(paste0(here::here(), "/sm-r/src/samples/Petco_PostgreSQL_ConnectionServerDevelopment.R"))
   print ("Connected to Development RDS.")
 }
