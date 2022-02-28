@@ -40,6 +40,7 @@ stages:
               mkdir $cwd
               ls $cwd
               cp $(caCertificate.secureFilePath) $cwd/config.yml
+              echo $pwd
         - task: CmdLine@2
           displayName: Step 2 - Building Docker image (development environment) - Monthly Model training (Sagemaker sample)
           inputs:
