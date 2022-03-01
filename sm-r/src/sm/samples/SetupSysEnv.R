@@ -20,7 +20,7 @@ if (ENV_FLAG == "production"){
   Sys.setenv("R_CONFIG_ACTIVE" = "default") # default is Development.
 }
 # Get Config based on Environment
-print (list.files(here::here(), recursive=TRUE))
+print (list.files(paste0(here::here(), "/docker_config")))
 config <<- config::get(file = paste0(here::here(), "/docker_config/config.yml"), use_parent = FALSE)
 # Set DB Password, AWS S3 Enviroment
 source(paste0(here::here(), "/src/sm/samples/aws_helper.R")) # Returns DB Password, AWS S3 bucket env
