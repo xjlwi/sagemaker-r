@@ -160,3 +160,6 @@ venv.bak/
 
 # Rproj
 *.Rproj
+
+# credentials
+/docker_config/config.yml
