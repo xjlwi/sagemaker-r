@@ -38,15 +38,14 @@ stages:
               cwd=$(pwd)"/docker_config"
               echo $cwd
               mkdir $cwd
-              ls $cwd
               cp $(caCertificate.secureFilePath) $cwd/config.yml
-              echo $pwd
+              echo $cwd
         - task: CmdLine@2
           displayName: Step 2 - Building Docker image (development environment) - Monthly Model training (Sagemaker sample)
           inputs:
             script: docker build --force-rm -t rph-demo-sm:sm -f sm-r/dockerfiles/sampleR.Dockerfile .
         - task: ECRPushImage@1
-          displayName: Step 3 - Pushing the sagemaker Monthly Model training (Sagemaker sample) to development ECR 
+          displayName: Step 3 - Pushing the (Sagemaker sample) to development ECR 
           inputs:
             awsCredentials: 'aws-raphael-dev'
             regionName: 'ap-southeast-1'
