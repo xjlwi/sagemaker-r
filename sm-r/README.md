@@ -24,14 +24,8 @@ To install them, run:
 ```
 kedro install
 ```
-
-## How to run your Kedro pipeline
-
-You can run your Kedro project with:
-
-```
-kedro run
-```
+## How to use this repository
+Start with `src/sm/samples/main_monthly_model.R`.
 
 ## How to test your Kedro project
 
